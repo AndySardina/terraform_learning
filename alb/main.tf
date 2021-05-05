@@ -130,7 +130,6 @@ resource "aws_subnet" "private_2" {
 }
 
 # NAT Gateway
-
 resource "aws_eip" "nat" {
 }
 
@@ -185,7 +184,7 @@ resource "aws_security_group" "allow_public_http" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.cidr_block]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -229,13 +228,6 @@ resource "aws_security_group" "internal_http" {
 resource "aws_launch_template" "sample_app" {
   name = "sample-app-launch-template"
 
-  block_device_mappings {
-    device_name = "/dev/sda1"
-    ebs {
-      volume_size = 20
-    }
-  }
-
   image_id = data.aws_ami.ami.id
 
   instance_initiated_shutdown_behavior = "terminate"
@@ -253,23 +245,6 @@ resource "aws_launch_template" "sample_app" {
   }
 
   user_data = filebase64("${path.module}/scripts/init.sh")
-}
-
-resource "aws_autoscaling_group" "asg" {
-  name             = "andsar-ag-1"
-  desired_capacity = 2
-  max_size         = 4
-  min_size         = 2
-
-  vpc_zone_identifier = [
-    aws_subnet.private_1.id,
-    aws_subnet.private_2.id
-  ]
-
-  launch_template {
-    id      = aws_launch_template.sample_app.id
-    version = "$Latest"
-  }
 }
 
 resource "aws_lb_target_group" "webserver" {
@@ -306,6 +281,26 @@ resource "aws_lb_listener" "front_end" {
     target_group_arn = aws_lb_target_group.webserver.arn
   }
 
+}
+
+resource "aws_autoscaling_group" "asg" {
+  name             = "andsar-ag-1"
+  desired_capacity = 2
+  max_size         = 4
+  min_size         = 2
+
+  vpc_zone_identifier = [
+    aws_subnet.private_1.id,
+    aws_subnet.private_2.id
+  ]
+
+  launch_template {
+    id      = aws_launch_template.sample_app.id
+    version = "$Latest"
+  }
+
+  target_group_arns         = [aws_lb_target_group.webserver.arn]
+  health_check_grace_period = 300
 }
 #################################################################################
 

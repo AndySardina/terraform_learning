@@ -41,10 +41,16 @@ override.tf.json
 Session.vim
 Sessionx.vim
 
-# # Temporary
+# Temporary
 .netrwhist
 *~
 # Auto-generated tag files
 tags
 # Persistent undo
 [._]*.un~
+
+# Mac
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
