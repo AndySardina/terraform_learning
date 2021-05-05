@@ -308,7 +308,7 @@ resource "aws_autoscaling_group" "asg" {
   health_check_grace_period = 300
 }
 
-# DNS Record 
+# DNS Record (ALIAS - https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.paf.zone_id
