@@ -40,6 +40,11 @@ data "aws_ami" "ami" {
     values = ["hvm"]
   }
 }
+
+data "aws_route53_zone" "paf" {
+  name         = "playground.pafcloud.net"
+  private_zone = false
+}
 #################################################################################
 
 
@@ -302,5 +307,20 @@ resource "aws_autoscaling_group" "asg" {
   target_group_arns         = [aws_lb_target_group.webserver.arn]
   health_check_grace_period = 300
 }
+
+# DNS Record 
+
+resource "aws_route53_record" "www" {
+  zone_id = data.aws_route53_zone.paf.zone_id
+  name    = "andsar.playground.pafcloud.net"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.alb.dns_name
+    zone_id                = aws_lb.alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
 #################################################################################
 
