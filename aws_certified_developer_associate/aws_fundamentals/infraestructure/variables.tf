@@ -13,6 +13,8 @@ variable "public_subnets_definition" {
 
   default     = {
     "eu-west-1a" = 1
+    "eu-west-1b" = 2
+    "eu-west-1c" = 3
   }
 }
 
