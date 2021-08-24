@@ -6,7 +6,7 @@ terraform {
     }
   }
 
-  required_version = ">= 0.15.1"
+  required_version = ">= 1.0.0"
 }
 
 provider "aws" {
@@ -61,23 +61,14 @@ resource "aws_vpc" "main" {
 
 
 # Public Subnets
-resource "aws_subnet" "public_1" {
+resource "aws_subnet" "public" {
+  count             = var.public_subnet_count
   vpc_id            = aws_vpc.main.id
-  availability_zone = data.aws_availability_zones.available.names[1]
-  cidr_block        = "10.30.30.0/24"
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  cidr_block        = "10.30.${(count.index + 1) * 10}.0/24"
 
   tags = {
-    Name = "andsar-public-subnet-1"
-  }
-}
-
-resource "aws_subnet" "public_2" {
-  vpc_id            = aws_vpc.main.id
-  availability_zone = data.aws_availability_zones.available.names[2]
-  cidr_block        = "10.30.40.0/24"
-
-  tags = {
-    Name = "andsar-public-subnet-2"
+    Name = "andsar-public-subnet-${count.index + 1}"
   }
 }
 
@@ -103,36 +94,24 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_route_table_association" "public_1" {
-  subnet_id      = aws_subnet.public_1.id
-  route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "public_2" {
-  subnet_id      = aws_subnet.public_2.id
+resource "aws_route_table_association" "public" {
+  count          = var.private_subnet_count
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
 # Private Subnets
-resource "aws_subnet" "private_1" {
+resource "aws_subnet" "private" {
+  count             = var.private_subnet_count
   vpc_id            = aws_vpc.main.id
-  availability_zone = data.aws_availability_zones.available.names[1]
-  cidr_block        = "10.30.50.0/24"
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  cidr_block        = "10.30.${(count.index + 5) * 10}.0/24"
 
   tags = {
-    Name = "andsar-private-subnet-1"
+    Name = "andsar-private-subnet-${count.index}"
   }
 }
 
-resource "aws_subnet" "private_2" {
-  vpc_id            = aws_vpc.main.id
-  availability_zone = data.aws_availability_zones.available.names[2]
-  cidr_block        = "10.30.60.0/24"
-
-  tags = {
-    Name = "andsar-private-subnet-2"
-  }
-}
 
 # NAT Gateway
 resource "aws_eip" "nat" {
@@ -140,7 +119,7 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "gw" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public_2.id
+  subnet_id     = aws_subnet.public[1].id
 
   tags = {
     Name = "andsar-nat-gw-1"
@@ -160,15 +139,12 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_route_table_association" "private_1" {
-  subnet_id      = aws_subnet.private_1.id
+resource "aws_route_table_association" "private" {
+  count          = var.private_subnet_count
+  subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
 }
 
-resource "aws_route_table_association" "private_2" {
-  subnet_id      = aws_subnet.private_2.id
-  route_table_id = aws_route_table.private.id
-}
 #################################################################################
 
 
@@ -268,10 +244,7 @@ resource "aws_lb" "alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_public_http.id]
-  subnets = [
-    aws_subnet.public_1.id,
-    aws_subnet.public_2.id
-  ]
+  subnets = aws_subnet.public[*].id
 
   enable_deletion_protection = false
 }
@@ -294,10 +267,7 @@ resource "aws_autoscaling_group" "asg" {
   max_size         = 4
   min_size         = 2
 
-  vpc_zone_identifier = [
-    aws_subnet.private_1.id,
-    aws_subnet.private_2.id
-  ]
+  vpc_zone_identifier = aws_subnet.private[*].id
 
   launch_template {
     id      = aws_launch_template.sample_app.id
