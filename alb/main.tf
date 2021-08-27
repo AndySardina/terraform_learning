@@ -42,7 +42,7 @@ data "aws_ami" "ami" {
 }
 
 data "aws_route53_zone" "paf" {
-  name         = "playground.pafcloud.net"
+  name         = "lns-sandbox-paf.com"
   private_zone = false
 }
 #################################################################################
@@ -57,6 +57,10 @@ data "aws_route53_zone" "paf" {
 resource "aws_vpc" "main" {
   cidr_block       = "10.30.0.0/16"
   instance_tenancy = "default"
+
+  tags = {
+    Name = "andsar-vpc"
+  }
 }
 
 
@@ -282,7 +286,7 @@ resource "aws_autoscaling_group" "asg" {
 
 resource "aws_route53_record" "www" {
   zone_id = data.aws_route53_zone.paf.zone_id
-  name    = "andsar.playground.pafcloud.net"
+  name    = "andsar.lns-sandbox-paf.com"
   type    = "A"
 
   alias {
