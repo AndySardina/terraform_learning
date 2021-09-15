@@ -43,7 +43,7 @@ resource "aws_alb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
+    type             = "fALBorward"
     target_group_arn = aws_alb_target_group.main.id
   }
 }
