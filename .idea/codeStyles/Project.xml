@@ -1,31 +1,11 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <option name="FORMATTER_TAGS_ENABLED" value="true" />
-    <option name="FORMATTER_TAGS_ACCEPT_REGEXP" value="true" />
-    <DB2CodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </DB2CodeStyleSettings>
-    <DerbyCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </DerbyCodeStyleSettings>
-    <H2CodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </H2CodeStyleSettings>
-    <HSQLCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </HSQLCodeStyleSettings>
     <JavaCodeStyleSettings>
       <option name="GENERATE_FINAL_LOCALS" value="true" />
       <option name="GENERATE_FINAL_PARAMETERS" value="true" />
       <option name="VISIBILITY" value="private" />
+      <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+      <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
       <option name="IMPORT_LAYOUT_TABLE">
         <value>
           <package name="javax" withSubpackages="true" static="false" />
@@ -55,41 +35,11 @@
       <option name="FILTER_CLASS_SUFFIX" value="Filter" />
       <option name="LISTENER_CLASS_SUFFIX" value="Listener" />
     </JavaeeCodeStyleSettings>
-    <MSSQLCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </MSSQLCodeStyleSettings>
-    <MySQLCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </MySQLCodeStyleSettings>
-    <OracleCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </OracleCodeStyleSettings>
-    <PostgresCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </PostgresCodeStyleSettings>
-    <SQLiteCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </SQLiteCodeStyleSettings>
-    <SqlCodeStyleSettings version="2">
+    <SqlCodeStyleSettings version="6">
       <option name="TABLE_OPENING" value="1" />
       <option name="TABLE_CONTENT" value="2" />
       <option name="TABLE_CLOSING" value="3" />
     </SqlCodeStyleSettings>
-    <SybaseCodeStyleSettings version="2">
-      <option name="TABLE_OPENING" value="1" />
-      <option name="TABLE_CONTENT" value="2" />
-      <option name="TABLE_CLOSING" value="3" />
-    </SybaseCodeStyleSettings>
     <codeStyleSettings language="JAVA">
       <option name="RIGHT_MARGIN" value="120" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
